@@ -1,0 +1,7 @@
+{
+  "name": "atfitk",
+  "description": "OnlineSchedule - Расписание занятий для студентов и преподавателей колледжа.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
+
