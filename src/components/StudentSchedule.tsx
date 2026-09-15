@@ -36,7 +36,7 @@ export const StudentSchedule: React.FC = () => {
       <div className="p-5 mb-4 bg-light rounded-3 text-center">
         <h1 className="display-5 fw-bold text-primary">Расписание для Студентов</h1>
         <p className="lead">
-          Введите код группы (например, 09-220) и нажмите "Сохранить", чтобы запомнить выбор.
+          Введите код группы (например, 214) и нажмите "Сохранить", чтобы запомнить выбор.
         </p>
       </div>
 
