@@ -83,7 +83,7 @@ export default function App() {
               className="btn btn-link btn-sm text-decoration-none text-secondary p-0"
               style={{ fontSize: '0.8rem' }}
             >
-              Инструкция деплоя на Vercel
+            
             </button>
           </div>
         </footer>
