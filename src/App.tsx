@@ -1,17 +1,10 @@
-/**
- * @license
- * SPDX-License-Identifier: Apache-2.0
- */
-
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
-import { GoogleSyncProvider } from './context/GoogleSyncContext';
 import { StudentSchedule } from './components/StudentSchedule';
 import { TeacherSchedule } from './components/TeacherSchedule';
-import { AdminModal } from './components/AdminModal';
 
 // ==========================================
-// 📢 НАСТРОЙКИ И ТЕКСТ ОБЪЯВЛЕНИЯ ПРЯМО ЗДЕСЬ:
+// 📢 НАСТРОЙКИ И ТЕКСТ ОБЪЯВЛЕНИЯ:
 // ==========================================
 const ANNOUNCEMENT = {
   enabled: true, // true = показывать, false = скрыть
@@ -65,24 +58,6 @@ function MainNavbar() {
 }
 
 function MainContent() {
-  const [isAdminOpen, setIsAdminOpen] = useState(false);
-
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.altKey && (e.key === 'a' || e.key === 'A' || e.key === 'ф' || e.key === 'Ф')) {
-        e.preventDefault();
-        setIsAdminOpen(true);
-      }
-    };
-    window.addEventListener('keydown', handleKeyDown);
-
-    if (window.location.hash === '#admin' || window.location.search.includes('admin')) {
-      setIsAdminOpen(true);
-    }
-
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, []);
-
   return (
     <div className="d-flex flex-column min-vh-100">
       <MainNavbar />
@@ -90,7 +65,10 @@ function MainContent() {
       <main className="container my-5 flex-grow-1">
         {/* БЛОК ОБЪЯВЛЕНИЯ */}
         {ANNOUNCEMENT.enabled && (
-          <div className={`alert alert-${ANNOUNCEMENT.type} shadow-sm border mb-4 p-3 rounded-3`} role="alert">
+          <div
+            className={`alert alert-${ANNOUNCEMENT.type} shadow-sm border mb-4 p-3 rounded-3`}
+            role="alert"
+          >
             <div className="d-flex align-items-center gap-2 mb-1">
               <h5 className="alert-heading mb-0 fw-bold fs-6">
                 {ANNOUNCEMENT.title}
@@ -107,6 +85,7 @@ function MainContent() {
           </div>
         )}
 
+        {/* ОСНОВНОЙ КОНТЕНТ (РАСПИСАНИЕ) */}
         <Routes>
           <Route path={ROUTE_STUDENT} element={<StudentSchedule />} />
           <Route path={ROUTE_TEACHER} element={<TeacherSchedule />} />
@@ -123,20 +102,11 @@ function MainContent() {
 
       <footer className="footer mt-auto py-3 bg-light border-top">
         <div className="container text-center">
-          <span
-            className="text-muted"
-            style={{ cursor: 'default', userSelect: 'none' }}
-            onDoubleClick={() => setIsAdminOpen(true)}
-          >
+          <span className="text-muted">
             © {new Date().getFullYear()} OnlineSchedule.
           </span>
         </div>
       </footer>
-
-      <AdminModal
-        isOpen={isAdminOpen}
-        onClose={() => setIsAdminOpen(false)}
-      />
     </div>
   );
 }
@@ -144,9 +114,7 @@ function MainContent() {
 export default function App() {
   return (
     <BrowserRouter>
-      <GoogleSyncProvider>
-        <MainContent />
-      </GoogleSyncProvider>
+      <MainContent />
     </BrowserRouter>
   );
 }
