@@ -2,7 +2,7 @@
  * @license
  * SPDX-License-Identifier: Apache-2.0
  */
-
+import { ANNOUNCEMENT_CONFIG } from './data/newsConfig';
 import React, { useState } from 'react';
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import { StudentSchedule } from './components/StudentSchedule';
