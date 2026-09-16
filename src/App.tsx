@@ -9,7 +9,17 @@ import { GoogleSyncProvider } from './context/GoogleSyncContext';
 import { StudentSchedule } from './components/StudentSchedule';
 import { TeacherSchedule } from './components/TeacherSchedule';
 import { AdminModal } from './components/AdminModal';
-import { ANNOUNCEMENT_CONFIG } from './data/newsConfig';
+
+// ==========================================
+// 📢 НАСТРОЙКИ И ТЕКСТ ОБЪЯВЛЕНИЯ ПРЯМО ЗДЕСЬ:
+// ==========================================
+const ANNOUNCEMENT = {
+  enabled: true, // true = показывать, false = скрыть
+  title: '📢 Важное объявление',
+  message: 'Внимание студентам и преподавателям: расписание на текущую неделю обновлено! Следите за изменениями в аудиториях.',
+  type: 'warning', // 'warning' (жёлтый), 'danger' (красный), 'info' (синий), 'success' (зелёный)
+  date: 'Обновлено сегодня',
+};
 
 const ROUTE_STUDENT = '/';
 const ROUTE_TEACHER = '/teacher';
@@ -57,7 +67,6 @@ function MainNavbar() {
 function MainContent() {
   const [isAdminOpen, setIsAdminOpen] = useState(false);
 
-  // Секретное открытие настроек: Alt + A
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.altKey && (e.key === 'a' || e.key === 'A' || e.key === 'ф' || e.key === 'Ф')) {
@@ -79,26 +88,25 @@ function MainContent() {
       <MainNavbar />
 
       <main className="container my-5 flex-grow-1">
-        {/* ВОТ ЗДЕСЬ ОКОШКО ОБЪЯВЛЕНИЯ: */}
-        {ANNOUNCEMENT_CONFIG.enabled && (
-          <div className={`alert alert-${ANNOUNCEMENT_CONFIG.type} shadow-sm border mb-4 p-3 rounded-3`} role="alert">
+        {/* БЛОК ОБЪЯВЛЕНИЯ */}
+        {ANNOUNCEMENT.enabled && (
+          <div className={`alert alert-${ANNOUNCEMENT.type} shadow-sm border mb-4 p-3 rounded-3`} role="alert">
             <div className="d-flex align-items-center gap-2 mb-1">
               <h5 className="alert-heading mb-0 fw-bold fs-6">
-                {ANNOUNCEMENT_CONFIG.title}
+                {ANNOUNCEMENT.title}
               </h5>
-              {ANNOUNCEMENT_CONFIG.date && (
+              {ANNOUNCEMENT.date && (
                 <span className="badge bg-light text-dark border small fw-normal">
-                  {ANNOUNCEMENT_CONFIG.date}
+                  {ANNOUNCEMENT.date}
                 </span>
               )}
             </div>
             <p className="mb-0 text-break" style={{ whiteSpace: 'pre-line' }}>
-              {ANNOUNCEMENT_CONFIG.message}
+              {ANNOUNCEMENT.message}
             </p>
           </div>
         )}
 
-        {/* А ЗДЕСЬ САМО РАСПИСАНИЕ: */}
         <Routes>
           <Route path={ROUTE_STUDENT} element={<StudentSchedule />} />
           <Route path={ROUTE_TEACHER} element={<TeacherSchedule />} />
@@ -113,7 +121,6 @@ function MainContent() {
         </Routes>
       </main>
 
-      {/* Подвал сайта */}
       <footer className="footer mt-auto py-3 bg-light border-top">
         <div className="container text-center">
           <span
