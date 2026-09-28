@@ -9,7 +9,7 @@ import { TeacherSchedule } from './components/TeacherSchedule';
 const ANNOUNCEMENT = {
   enabled: true, // true = показывать, false = скрыть
   title: '📢 Важное объявление',
-  message: 'Внимание студентам и преподавателям: расписание на текущую неделю обновлено! Елнұр жүгермек хәппи бөрздэй ♥',
+  message: 'Внимание студентам и преподавателям: расписание на текущую неделю обновлено! ',
   type: 'warning', // 'warning' (жёлтый), 'danger' (красный), 'info' (синий), 'success' (зелёный)
   date: 'Обновлено сегодня',
 };
