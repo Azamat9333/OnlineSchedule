@@ -47,8 +47,9 @@ export function parseRawSchedule(entries: RawScheduleEntry[]): ScheduleItem[] {
       const courseMatch = key.match(/((\d)\s*курс)/i);
       const course = courseMatch ? courseMatch[1] : 'Курс не указан';
 
-      const groupMatch = key.match(/\d{2}-\d{3}/);
-      const groupName = groupMatch ? groupMatch[0] : key.substring(0, 15).trim();
+      // Match 3-digit group code like 214, 308, 117, 100, 109, etc.
+      const groupMatch = key.match(/(?:09-|11-)?(\d{3})/);
+      const groupName = groupMatch ? groupMatch[1] : key.substring(0, 15).trim();
 
       const parts = rawVal.split('/').map((s) => s.trim()).filter((s) => s.length > 0);
       let weekParity: string[] = [];

@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { DayOfWeek } from '../types';
-import { DAYS, scheduleItems } from '../data/scheduleParser';
+import { DAYS } from '../data/scheduleParser';
+import { useGoogleSync } from '../context/GoogleSyncContext';
 
 const STORAGE_KEY = 'savedTeacherName';
 
@@ -9,18 +10,35 @@ export const TeacherSchedule: React.FC = () => {
     () => localStorage.getItem(STORAGE_KEY) || ''
   );
   const [selectedDay, setSelectedDay] = useState<DayOfWeek>(DAYS[0]);
+  const { schedule } = useGoogleSync();
+
+  const normalizeText = (text: string) => {
+    return text
+      .toLowerCase()
+      .replace(/ә/g, 'а')
+      .replace(/і/g, 'и')
+      .replace(/ғ/g, 'г')
+      .replace(/қ/g, 'к')
+      .replace(/ң/g, 'н')
+      .replace(/ө/g, 'о')
+      .replace(/ұ/g, 'у')
+      .replace(/ү/g, 'у')
+      .replace(/һ/g, 'х')
+      .trim();
+  };
 
   const filteredLessons = useMemo(() => {
-    if (!teacherInput) return [];
-    const search = teacherInput.trim().toUpperCase();
-    return scheduleItems
-      .filter(
-        (lesson) =>
-          lesson.day === selectedDay &&
-          lesson.discipline.toUpperCase().includes(search)
-      )
+    if (!teacherInput.trim()) return [];
+    const searchNorm = normalizeText(teacherInput);
+    return schedule
+      .filter((lesson) => {
+        if (lesson.day !== selectedDay) return false;
+        const discNorm = normalizeText(lesson.discipline || '');
+        const teachNorm = normalizeText(lesson.teacher || '');
+        return discNorm.includes(searchNorm) || teachNorm.includes(searchNorm);
+      })
       .sort((a, b) => a.time.localeCompare(b.time));
-  }, [teacherInput, selectedDay]);
+  }, [schedule, teacherInput, selectedDay]);
 
   const handleSave = () => {
     if (teacherInput.trim()) {
@@ -108,7 +126,7 @@ export const TeacherSchedule: React.FC = () => {
                     <tr key={idx} className="table-warning">
                       <th>{lesson.time}</th>
                       <td>
-                        {lesson.groupName} ({lesson.course})
+                        {lesson.groupName} {lesson.course ? `(${lesson.course})` : ''}
                       </td>
                       <td>{lesson.discipline}</td>
                     </tr>

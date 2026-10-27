@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import { StudentSchedule } from './components/StudentSchedule';
 import { TeacherSchedule } from './components/TeacherSchedule';
+import { GoogleSyncProvider } from './context/GoogleSyncContext';
 
 // ==========================================
 // 📢 НАСТРОЙКИ И ТЕКСТ ОБЪЯВЛЕНИЯ:
@@ -114,7 +115,9 @@ function MainContent() {
 export default function App() {
   return (
     <BrowserRouter>
-      <MainContent />
+      <GoogleSyncProvider>
+        <MainContent />
+      </GoogleSyncProvider>
     </BrowserRouter>
   );
 }

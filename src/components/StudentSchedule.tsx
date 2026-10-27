@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { DayOfWeek } from '../types';
-import { DAYS, scheduleItems } from '../data/scheduleParser';
+import { DAYS } from '../data/scheduleParser';
+import { useGoogleSync } from '../context/GoogleSyncContext';
 
 const STORAGE_KEY = 'savedGroupNumber';
 
@@ -9,18 +10,19 @@ export const StudentSchedule: React.FC = () => {
     () => localStorage.getItem(STORAGE_KEY) || ''
   );
   const [selectedDay, setSelectedDay] = useState<DayOfWeek>(DAYS[0]);
+  const { schedule } = useGoogleSync();
 
   const filteredLessons = useMemo(() => {
     if (!groupInput) return [];
     const search = groupInput.trim().toUpperCase();
-    return scheduleItems
+    return schedule
       .filter(
         (lesson) =>
           lesson.day === selectedDay &&
           lesson.groupName.toUpperCase().includes(search)
       )
       .sort((a, b) => a.time.localeCompare(b.time));
-  }, [groupInput, selectedDay]);
+  }, [schedule, groupInput, selectedDay]);
 
   const handleSave = () => {
     if (groupInput.trim()) {
@@ -54,7 +56,7 @@ export const StudentSchedule: React.FC = () => {
                 id="groupInput"
                 value={groupInput}
                 onChange={(e) => setGroupInput(e.target.value)}
-                placeholder="Например, 09-220"
+                placeholder="Например, 214 или 308"
               />
             </div>
             <div className="col-md-5">
