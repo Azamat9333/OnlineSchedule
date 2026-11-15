@@ -51,13 +51,18 @@ export function parseRawSchedule(entries: RawScheduleEntry[]): ScheduleItem[] {
       const groupMatch = key.match(/(?:09-|11-)?(\d{3})/);
       const groupName = groupMatch ? groupMatch[1] : key.substring(0, 15).trim();
 
-      const parts = rawVal.split('/').map((s) => s.trim()).filter((s) => s.length > 0);
+      const protectedVal = rawVal.replace(/ж\/е/gi, 'ж__SLASH__е');
+      const rawParts = protectedVal
+        .split('/')
+        .map((s) => s.replace(/ж__SLASH__е/g, 'ж/е').trim());
+      const nonEmptyParts = rawParts.filter((s) => s.length > 0);
       let weekParity: string[] = [];
-      if (parts.length === 2) {
+      if (rawParts.length === 2 && nonEmptyParts.length > 0) {
         weekParity = [' (нечетное)', ' (четное)'];
       }
 
-      parts.forEach((part, idx) => {
+      rawParts.forEach((part, idx) => {
+        if (!part) return;
         const { fullDisciplineText, period } = cleanDiscipline(part);
         const fullDiscipline =
           fullDisciplineText + (weekParity[idx] || '') + (period ? ` (${period})` : '');
