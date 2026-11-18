@@ -57,7 +57,11 @@ export function parseRawSchedule(entries: RawScheduleEntry[]): ScheduleItem[] {
         .map((s) => s.replace(/ж__SLASH__е/g, 'ж/е').trim());
       const nonEmptyParts = rawParts.filter((s) => s.length > 0);
       let weekParity: string[] = [];
-      if (rawParts.length === 2 && nonEmptyParts.length > 0) {
+      if (
+        rawParts.length === 2 &&
+        nonEmptyParts.length > 0 &&
+        !/^\d+(?:[,–-]\d+)?\)/.test(nonEmptyParts[0])
+      ) {
         weekParity = [' (нечетное)', ' (четное)'];
       }
 
